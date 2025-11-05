@@ -3,12 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const signToken = (userId, role) => {
-    return jwt.sign(
-        { userId, role },
-        process.env.JWT_SECRET,
-        {expiresIn: process.env.JWT_EXPIRES_IN}
-    );
-};
+    return jwt.sign({  userId, role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+}
 
 const signup = (req, res) => {
     const name = req.body.name;
@@ -52,15 +48,17 @@ const login = (req, res) => {
     const query = `SELECT * FROM User WHERE email = '${email}'`;
 
     db.get(query, (err, row) => {
+        
         if (err) {
             console.log(err);
             return res.status(500).json({ error: "Error retrieving user" });
         }
-        if (!row) {
+       /* if (!row) {
             return res.status(400).json({ error: "Invalid email or password" });
-        }
+        }*/
 
         bcrypt.compare(password, row.password, (err, result) => {
+           
             if (err) {
                 console.log(err);
                 return res.status(500).json({ error: "Error comparing passwords" });
@@ -70,7 +68,7 @@ const login = (req, res) => {
             }
 
             const token = signToken(row.id, row.role);
-
+          
             return res.status(200).json({
                 message: "Login successful",
                 data: {id: row.id, name: row.name, email: row.email, role: row.role},token,
