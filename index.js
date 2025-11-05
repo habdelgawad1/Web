@@ -1,10 +1,12 @@
 const express = require('express');
 const app = express();
 const TripRouter = require('./routes/TripRouter');
+const UserRouter = require('./routes/UserRouter');
+const AuthRouter = require('./routes/AuthRouter.js');
 
 app.use(express.json());
 app.use('/trips', TripRouter);
-app.use('/users', require('./routes/UserRouter'));
-app.use('/auth', require('./routes/AuthRouter'));
+app.use('/users', UserRouter);
+app.use('/auth', AuthRouter);
 
-module.exports = app;
+module.exports = {app};

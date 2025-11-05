@@ -1,5 +1,5 @@
-const { db } = require("/travel.db");
-const bcrypt = require('bcrypt');
+const { db } = require('../models/db.js');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const signToken = (userId, role) => {
@@ -79,7 +79,7 @@ const login = (req, res) => {
     });
 };
 
-module.exports = { signup, login };
+module.exports = { signup, login }; 
 
     
     
