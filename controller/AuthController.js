@@ -2,6 +2,14 @@ const { db } = require("/travel.db");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const signToken = (userId, role) => {
+    return jwt.sign(
+        { userId, role },
+        process.env.JWT_SECRET,
+        {expiresIn: process.env.JWT_EXPIRES_IN}
+    );
+};
+
 const signup = (req, res) => {
     const name = req.body.name;
     const email = req.body.email;
@@ -60,9 +68,12 @@ const login = (req, res) => {
             if (!result) {
                 return res.status(400).json({ error: "Invalid email or password" });
             }
+
+            const token = signToken(row.id, row.role);
+
             return res.status(200).json({
                 message: "Login successful",
-                data: {id: row.id, name: row.name, email: row.email, role: row.role},
+                data: {id: row.id, name: row.name, email: row.email, role: row.role},token,
             });
         });
     });
