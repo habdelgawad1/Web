@@ -17,9 +17,10 @@ const RetrieveAllUsers = (req, res) => {
 
 const RetrieveUserById = (req, res) => {
     const id = Number(req.params.id);
-    const query = `SELECT * FROM User WHERE id = ${id}`;
+    const query = `SELECT * FROM User WHERE id = '?'`;
+    const params = id;
 
-    db.get(query, (err, row) => {
+    db.get(query, params, (err, row) => {
         if (err) {
             console.log(err);
             res.status(500).json({ error: "Error Retrieving User" });
@@ -44,9 +45,11 @@ const CreateUser = (req, res) => {
     }
 
     const query = `INSERT INTO User (name, email, password, role)
-    VALUES ('${name}', '${email}', '${password}', '${role}')`;
+    VALUES ('?', '?', '?', '?')`;
 
-    db.run(query, function (err) {
+    const params = [name, email, password, role];
+
+    db.run(query, params, function (err) {
         if (err) {
             console.log(err);
             return res.status(500).json({
@@ -62,9 +65,10 @@ const CreateUser = (req, res) => {
 
 const DeleteUserById = (req, res) => {
     const id = Number(req.params.id);
-    const query = `DELETE FROM User WHERE id = ${id}`;
+    const query = `DELETE FROM User WHERE id = '?'`;
+    const params = id;
 
-    db.run(query, function (err) {
+    db.run(query, params, function (err) {
         if (err) {
             console.log(err);
             return res.status(500).json({
@@ -88,8 +92,11 @@ const UpdateUserById = (req, res) => {
     const id = Number(req.params.id);
     const { name, email, password, role } = req.body;
     const query = `UPDATE User SET 
-    name='${name}', email='${email}', password='${password}', role='${role}' WHERE id = ${id}`;
-    db.run(query, function (err) {
+    name='?', email='?', password='?', role='?' WHERE id = '?'`;
+
+    const params = [name, email, password, role, id];
+
+    db.run(query, params, function (err) {
         if (err) {
             console.log(err);
             return res.status(500).json({

@@ -22,9 +22,10 @@ const signup = (req, res) => {
             return res.status(500).json({ error: "Error hashing password" });
         }
 
-    const query = `INSERT INTO User (name, email, password, role) VALUES ('${name}', '${email}', '${hashedPassword}', '${role}')`;
+    const query = `INSERT INTO User (name, email, password, role) VALUES ('?', '?', '?', '?')`;
+    const params = [name, email, hashedPassword, role];
 
-    db.run(query, (err) => {
+    db.run(query, params, (err) => {
         if (err) {
             console.log(err);
             if (err.message.includes("UNIQUE constraint failed")) {
@@ -45,17 +46,18 @@ const login = (req, res) => {
         return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const query = `SELECT * FROM User WHERE email = '${email}'`;
+    const query = `SELECT * FROM User WHERE email = '?'`;
+    const params = email;
 
-    db.get(query, (err, row) => {
+    db.get(query, params, (err, row) => {
         
         if (err) {
             console.log(err);
             return res.status(500).json({ error: "Error retrieving user" });
         }
-       /* if (!row) {
+        if (!row) {
             return res.status(400).json({ error: "Invalid email or password" });
-        }*/
+        }
 
         bcrypt.compare(password, row.password, (err, result) => {
            

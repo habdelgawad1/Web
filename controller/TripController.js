@@ -18,9 +18,10 @@ const RetrieveAllTrips = (req, res) => {
 
 const RetrieveTripById = (req, res) => {
     const id = Number(req.params.id);
-    const query = `SELECT * FROM Trip WHERE id = ${id}`;
+    const query = `SELECT * FROM Trip WHERE id = '?'`;
+    const params = id;
 
-    db.get(query, (err, row) => {
+    db.get(query, params, (err, row) => {
         if (err) {
             console.log(err);
             res.status(500).json({ error: "Error Retrieving Trips" });
@@ -51,10 +52,13 @@ const CreateTrip = (req,res) => {
     const query = `INSERT INTO Trip (destination, location, continet, language, description, 
     flightCost, hotelCost, foodCost, visacost, currencycode)
 
-    VALUES ('${destination}', '${location}', '${continet}', '${language}', '${description}', 
-              '${flightCost}', '${hotelCost}', '${foodCost}', '${visacost}', '${currencycode}')`;
+    VALUES ('?', '?', '?', '?', '?', 
+              '?', '?', '?', '?', '?')`;
 
-    db.run(query, function(err){
+    const params = [destination,location,continet,language,description,flightCost,
+                    hotelCost,foodCost,visacost,currencycode];
+
+    db.run(query, params, function(err){
         if(err){
             console.log(err);
             return res.status(500).json({
@@ -71,9 +75,10 @@ const CreateTrip = (req,res) => {
 
 const DeleteTripById = (req,res) => {
     const id = Number(req.params.id);
-    const query = `DELETE FROM Trip WHERE id = ${id}`;
+    const query = `DELETE FROM Trip WHERE id = '?'`;
+    const params = id;
 
-    db.run(query, function(err){
+    db.run(query, params, function(err){
         if(err){
             console.log(err);
             return  res.status(500).json({
@@ -97,11 +102,16 @@ const UpdateTripById = (req,res) => {
     const id = Number(req.params.id);
     const{destination,location,continet,language,description,flightCost,
           hotelCost,foodCost,visacost,currencycode}=req.body;
+
     const query = `UPDATE Trip SET 
-    destination='${destination}', location='${location}', continet='${continet}', language='${language}', 
-    description='${description}', flightCost='${flightCost}', hotelCost='${hotelCost}', foodCost='${foodCost}', 
-    visacost='${visacost}', currencycode='${currencycode}' WHERE id = ${id}`;
-    db.run(query, function(err){
+    destination='?', location='?', continet='?', language='?', 
+    description='?', flightCost='?', hotelCost='?', foodCost='?', 
+    visacost='?', currencycode='?' WHERE id = '?'`;
+
+    const params = [destination,location,continet,language,description,flightCost,
+                    hotelCost,foodCost,visacost,currencycode,id];
+
+    db.run(query, params, function(err){
         if(err){
             console.log(err);
             return res.status(500).json({
