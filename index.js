@@ -5,10 +5,12 @@ dotenv.config();
 const TripRouter = require('./routes/TripRouter');
 const UserRouter = require('./routes/UserRouter');
 const AuthRouter = require('./routes/AuthRouter.js');
-
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 app.use(express.json());
 app.use('/trips', TripRouter);
 app.use('/users', UserRouter);
 app.use('/auth', AuthRouter);
+
 
 module.exports = {app};

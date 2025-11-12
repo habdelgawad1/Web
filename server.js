@@ -1,5 +1,5 @@
 const {app} = require('./index');
-const PORT = 3000;
+const PORT = 5000;
 const db_access = require('./models/db.js');
 const db = db_access.db;
 

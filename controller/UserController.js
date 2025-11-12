@@ -3,6 +3,11 @@ const { db } = require("../models/db.js");
 const RetrieveAllUsers = (req, res) => {
     const query = "SELECT * FROM User";
 
+    res.cookie('UsersRetreived', `Trip ID ${id}`, {
+        httpOnly: true,
+        maxAge: 15 * 60 * 1000 // 15 minutes
+    });
+
     db.all(query, [], (err, rows) => {
         if (err) {
             console.log(err);
@@ -19,6 +24,11 @@ const RetrieveUserById = (req, res) => {
     const id = Number(req.params.id);
     const query = `SELECT * FROM User WHERE id = '?'`;
     const params = id;
+
+    res.cookie('SpecificUserRetreived', `Trip ID ${id}`, {
+        httpOnly: true,
+        maxAge: 15 * 60 * 1000 // 15 minutes
+    });
 
     db.get(query, params, (err, row) => {
         if (err) {
@@ -49,6 +59,11 @@ const CreateUser = (req, res) => {
 
     const params = [name, email, password, role];
 
+    res.cookie('UserCreated', `Trip ID ${id}`, {
+        httpOnly: true,
+        maxAge: 15 * 60 * 1000 // 15 minutes
+    });
+
     db.run(query, params, function (err) {
         if (err) {
             console.log(err);
@@ -67,6 +82,11 @@ const DeleteUserById = (req, res) => {
     const id = Number(req.params.id);
     const query = `DELETE FROM User WHERE id = '?'`;
     const params = id;
+
+    res.cookie('UserDeleted', `Trip ID ${id}`, {
+        httpOnly: true,
+        maxAge: 15 * 60 * 1000 // 15 minutes
+    });
 
     db.run(query, params, function (err) {
         if (err) {
@@ -95,6 +115,11 @@ const UpdateUserById = (req, res) => {
     name='?', email='?', password='?', role='?' WHERE id = '?'`;
 
     const params = [name, email, password, role, id];
+
+    res.cookie('UserUpdated', `Trip ID ${id}`, {
+        httpOnly: true,
+        maxAge: 15 * 60 * 1000 // 15 minutes
+    });
 
     db.run(query, params, function (err) {
         if (err) {

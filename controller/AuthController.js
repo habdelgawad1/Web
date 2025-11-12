@@ -25,6 +25,11 @@ const signup = (req, res) => {
     const query = `INSERT INTO User (name, email, password, role) VALUES ('?', '?', '?', '?')`;
     const params = [name, email, hashedPassword, role];
 
+    res.cookie('SignedUp', `Trip ID ${id}`, {
+        httpOnly: true,
+        maxAge: 15 * 60 * 1000 // 15 minutes
+    });
+
     db.run(query, params, (err) => {
         if (err) {
             console.log(err);
@@ -48,6 +53,11 @@ const login = (req, res) => {
 
     const query = `SELECT * FROM User WHERE email = '?'`;
     const params = email;
+
+    res.cookie('LoggedIn', `Trip ID ${id}`, {
+        httpOnly: true,
+        maxAge: 15 * 60 * 1000 // 15 minutes
+    });
 
     db.get(query, params, (err, row) => {
         
